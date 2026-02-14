@@ -58,7 +58,7 @@ android.archs = arm64-v8a
 android.api = 34
 
 # (int) Minimum API your APK will support.
-android.minapi = 23
+android.minapi = 24
  
 # (bool) Accept Android SDK licenses automatically
 android.accept_sdk_license = True
