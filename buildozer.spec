@@ -59,6 +59,9 @@ android.api = 31
 
 # (int) Minimum API your APK will support.
 android.minapi = 21
+ 
+# (bool) Accept Android SDK licenses automatically
+android.accept_sdk_license = True
 
 # (int) Android SDK version to use
 #android.sdk = 20
@@ -77,10 +80,6 @@ android.minapi = 21
 
 # (str) Android gradle dependencies
 #android.gradle_dependencies = 'com.android.support:support-v4:26.1.0'
-
-[app]
-# Accept Android SDK licenses automatically to avoid prompts
-android.accept_sdk_license = True
 [buildozer]
 
 # (int) Log level (0 = error only, 1 = info, 2 = debug (with command output))
