@@ -1,3 +1,4 @@
+
 name: Android APK
 
 on:
@@ -28,12 +29,11 @@ jobs:
         run: |
           mkdir -p .buildozer
           docker run --rm -i \
-            -e BUILDOZER_ALLOW_ROOT=1 \
             -e HOME=/home/user \
             -v "$PWD":/home/user/app \
             -v "$PWD/.buildozer":/home/user/.buildozer \
             kivy/buildozer \
-            buildozer android debug
+            sh -lc 'export BUILDOZER_ALLOW_ROOT=1; git config --global --add safe.directory /home/user/app; buildozer android debug'
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
