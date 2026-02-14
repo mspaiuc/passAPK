@@ -79,14 +79,10 @@ android.accept_sdk_license = True
 #android.adb_args = -H host.docker.internal
 
 # (str) Android gradle dependencies
-#android.gradle_dependencies = 'com.android.support:support-v4:26.1.0'
-[buildozer]
 # (str) python-for-android settings
 p4a.fork = kivy
 p4a.branch = develop
 [buildozer]
-
-# (int) Log level (0 = error only, 1 = info, 2 = debug (with command output))
 log_level = 2
 
 # (int) Display warning if buildozer is run as root (0 = False, 1 = True)
