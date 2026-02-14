@@ -37,9 +37,9 @@ jobs:
             kivy/buildozer \
             -lc 'apt-get update && apt-get install -y rustc cargo >/dev/null 2>&1 || true; \
                  python3 -m pip install --upgrade pip setuptools wheel >/dev/null 2>&1 || true; \
-                 python3 -m pip install setuptools-rust >/dev/null 2>&1 || true; \
                  yes | sdkmanager --licenses || true; \
                  yes | sdkmanager "platform-tools" "platforms;android-31" "build-tools;31.0.0" "cmdline-tools;latest" || true; \
+                 buildozer android p4a -- pip install -U pip setuptools wheel setuptools-rust && \
                  buildozer android debug'
 
       - name: Upload APK artifact
