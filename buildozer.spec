@@ -55,10 +55,10 @@ android.permissions = WRITE_EXTERNAL_STORAGE,READ_EXTERNAL_STORAGE
 android.archs = arm64-v8a
 
 # (int) Target Android API, should be as high as possible.
-android.api = 31
+android.api = 34
 
 # (int) Minimum API your APK will support.
-android.minapi = 21
+android.minapi = 23
  
 # (bool) Accept Android SDK licenses automatically
 android.accept_sdk_license = True
