@@ -31,7 +31,6 @@ jobs:
             --entrypoint /bin/bash \
             -e HOME=/home/user \
             -e BUILDOZER_ALLOW_ROOT=1 \
-            -e CRYPTOGRAPHY_DONT_BUILD_RUST=1 \
             -v "$PWD":/home/user/app \
             -v "$PWD/.buildozer":/home/user/.buildozer \
             -w /home/user/app \
@@ -40,7 +39,7 @@ jobs:
                  python3 -m pip install --upgrade pip setuptools wheel >/dev/null 2>&1 || true; \
                  yes | sdkmanager --licenses || true; \
                  yes | sdkmanager "platform-tools" "platforms;android-31" "build-tools;31.0.0" "cmdline-tools;latest" || true; \
-                 buildozer android p4a -- env CRYPTOGRAPHY_DONT_BUILD_RUST=1 pip install -U pip setuptools wheel "cryptography==3.4.8" cffi pycparser && \
+                 buildozer android p4a -- pip install -U pip setuptools wheel setuptools-rust && \
                  buildozer android debug'
 
       - name: Upload APK artifact
