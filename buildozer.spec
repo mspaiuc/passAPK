@@ -52,7 +52,7 @@ fullscreen = 0
 android.permissions = WRITE_EXTERNAL_STORAGE,READ_EXTERNAL_STORAGE
 
 # (str) Build only one architecture initially to simplify build
-android.arch = arm64-v8a
+android.archs = arm64-v8a
 
 # (int) Target Android API, should be as high as possible.
 android.api = 31
@@ -78,6 +78,9 @@ android.minapi = 21
 # (str) Android gradle dependencies
 #android.gradle_dependencies = 'com.android.support:support-v4:26.1.0'
 
+[app]
+# Accept Android SDK licenses automatically to avoid prompts
+android.accept_sdk_license = True
 [buildozer]
 
 # (int) Log level (0 = error only, 1 = info, 2 = debug (with command output))
