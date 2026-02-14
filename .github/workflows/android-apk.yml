@@ -31,12 +31,15 @@ jobs:
             --entrypoint /bin/bash \
             -e HOME=/home/user \
             -e BUILDOZER_ALLOW_ROOT=1 \
-            -e CRYPTOGRAPHY_DONT_BUILD_RUST=1 \
             -v "$PWD":/home/user/app \
             -v "$PWD/.buildozer":/home/user/.buildozer \
             -w /home/user/app \
             kivy/buildozer \
-            -lc 'python3 -m pip install --upgrade pip setuptools wheel >/dev/null 2>&1 || true; \
+            -lc 'apt-get update && apt-get install -y curl build-essential >/dev/null 2>&1 || true; \
+                 curl -sSf https://sh.rustup.rs | sh -s -- -y >/dev/null 2>&1 || true; \
+                 export PATH="$HOME/.cargo/bin:$PATH"; \
+                 rustup target add aarch64-linux-android >/dev/null 2>&1 || true; \
+                 python3 -m pip install --upgrade pip setuptools wheel >/dev/null 2>&1 || true; \
                  buildozer android debug'
 
       - name: Upload APK artifact
