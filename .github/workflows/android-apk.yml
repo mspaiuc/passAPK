@@ -28,13 +28,14 @@ jobs:
         run: |
           mkdir -p .buildozer
           docker run --rm -i \
+            --entrypoint /bin/bash \
             -e HOME=/home/user \
             -e BUILDOZER_ALLOW_ROOT=1 \
             -v "$PWD":/home/user/app \
             -v "$PWD/.buildozer":/home/user/.buildozer \
             -w /home/user/app \
             kivy/buildozer \
-            android debug
+            -lc 'yes | sdkmanager "platform-tools" "platforms;android-31" "build-tools;31.0.0" "cmdline-tools;latest" || true; buildozer android debug'
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
