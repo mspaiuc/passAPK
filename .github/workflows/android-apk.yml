@@ -27,12 +27,15 @@ jobs:
       - name: Build APK (debug)
         run: |
           mkdir -p .buildozer
+          UID=$(id -u)
+          GID=$(id -g)
           docker run --rm -i \
+            --user $UID:$GID \
             -e HOME=/home/user \
             -v "$PWD":/home/user/app \
             -v "$PWD/.buildozer":/home/user/.buildozer \
             kivy/buildozer \
-            sh -lc 'export BUILDOZER_ALLOW_ROOT=1; git config --global --add safe.directory /home/user/app; buildozer android debug'
+            sh -lc 'git config --global --add safe.directory /home/user/app; buildozer android debug'
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
