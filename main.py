@@ -25,10 +25,14 @@ FIXED_KEY = b"CHANGE_ME_IN_PROD_9876543210_CHANGE_ME"
 
 def get_data_path():
     if platform == 'android':
-        from android.storage import primary_external_storage_path
-        dir_path = os.path.join(primary_external_storage_path(), 'PasswordManager')
+        try:
+            from android.storage import app_storage_path
+            dir_path = app_storage_path()
+        except Exception:
+            from android.storage import primary_external_storage_path
+            dir_path = os.path.join(primary_external_storage_path(), 'PasswordManager')
         if not os.path.exists(dir_path):
-            os.makedirs(dir_path)
+            os.makedirs(dir_path, exist_ok=True)
         return os.path.join(dir_path, DATA_FILE)
     return DATA_FILE
 
