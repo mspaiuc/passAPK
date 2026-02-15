@@ -51,11 +51,11 @@ fullscreen = 0
 # (list) Permissions
 android.permissions = WRITE_EXTERNAL_STORAGE,READ_EXTERNAL_STORAGE
 
-# (str) Build only one architecture initially to simplify build
-android.archs = arm64-v8a
+# (str) Architectures to build
+android.archs = arm64-v8a,armeabi-v7a
 
 # (int) Target Android API, should be as high as possible.
-android.api = 34
+android.api = 31
 
 # (int) Minimum API your APK will support.
 android.minapi = 24
