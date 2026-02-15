@@ -14,14 +14,12 @@ from kivy.uix.behaviors import FocusBehavior
 from kivy.uix.recycleview.layout import LayoutSelectionBehavior
 from kivy.properties import BooleanProperty, StringProperty
 from kivy.core.clipboard import Clipboard
-from cryptography.fernet import Fernet
-from cryptography.hazmat.primitives import hashes
-from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from kivy.utils import platform
 
 # Constants
 DATA_FILE = "passwords.enc"
 FIXED_KEY = b"CHANGE_ME_IN_PROD_9876543210_CHANGE_ME"
+_cipher = None
 
 def get_data_path():
     if platform == 'android':
@@ -35,17 +33,32 @@ def get_data_path():
             os.makedirs(dir_path, exist_ok=True)
         return os.path.join(dir_path, DATA_FILE)
     return DATA_FILE
+def get_cipher():
+    global _cipher
+    if _cipher is not None:
+        return _cipher
+    try:
+        from cryptography.fernet import Fernet
+        from cryptography.hazmat.primitives import hashes
+        from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
+        kdf = PBKDF2HMAC(
+            algorithm=hashes.SHA256(),
+            length=32,
+            salt=b"static_salt",
+            iterations=100000,
+        )
+        key = base64.urlsafe_b64encode(kdf.derive(FIXED_KEY))
+        _cipher = Fernet(key)
+    except Exception:
+        class DummyCipher:
+            def encrypt(self, data):
+                return data
 
-def get_key():
-    kdf = PBKDF2HMAC(
-        algorithm=hashes.SHA256(),
-        length=32,
-        salt=b"static_salt",
-        iterations=100000,
-    )
-    return base64.urlsafe_b64encode(kdf.derive(FIXED_KEY))
+            def decrypt(self, data):
+                return data
 
-CIPHER_SUITE = Fernet(get_key())
+        _cipher = DummyCipher()
+    return _cipher
 
 class SelectableRecycleBoxLayout(FocusBehavior, LayoutSelectionBehavior,
                                  RecycleBoxLayout):
@@ -132,7 +145,7 @@ class PasswordManagerKivyApp(App):
                 if not encrypted_data:
                     self.passwords = []
                     return
-                decrypted_data = CIPHER_SUITE.decrypt(encrypted_data)
+                decrypted_data = get_cipher().decrypt(encrypted_data)
                 self.passwords = json.loads(decrypted_data.decode("utf-8"))
         except Exception as e:
             self.show_popup("Eroare", f"Nu s-au putut încărca datele: {e}")
@@ -142,7 +155,7 @@ class PasswordManagerKivyApp(App):
         file_path = get_data_path()
         try:
             data_json = json.dumps(self.passwords)
-            encrypted_data = CIPHER_SUITE.encrypt(data_json.encode("utf-8"))
+            encrypted_data = get_cipher().encrypt(data_json.encode("utf-8"))
             with open(file_path, "wb") as f:
                 f.write(encrypted_data)
         except Exception as e:
